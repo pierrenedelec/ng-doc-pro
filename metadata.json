@@ -1,0 +1,5 @@
+{
+  "name": "Dynamic Component Dashboard",
+  "description": "An application that allows users to dynamically add, move, and remove UI components on a dashboard canvas, with changes saved to local storage.",
+  "requestFramePermissions": []
+}

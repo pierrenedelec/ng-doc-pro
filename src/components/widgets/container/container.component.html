@@ -1,0 +1,20 @@
+
+<div class="w-full h-full bg-slate-200/50 border-2 rounded-md flex items-center justify-center relative">
+  @if (label()) {
+    <span class="text-slate-500 text-sm">{{ label() }}</span>
+  }
+  
+  <!-- Render Children -->
+  <div class="absolute top-0 left-0 w-full h-full">
+    @for (child of children(); track child.id) {
+       <app-dynamic-host 
+          [instance]="child"
+          [isPreviewMode]="isPreviewMode()"
+          (remove)="remove.emit($event)" 
+          (edit)="edit.emit($event)" 
+          (widgetChange)="onChildWidgetChange($event)"
+          (selectWidget)="selectWidget.emit($event)"
+          (ungroup)="ungroup.emit($event)"></app-dynamic-host>
+    }
+  </div>
+</div>
