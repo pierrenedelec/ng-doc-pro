@@ -9,19 +9,11 @@ services:
     # Graceful shutdown timeout
     stop_grace_period: 1m
     # Port mapping (host:container)
-    # HTTP: 3000 -> 80, HTTPS: 3443 -> 443
+    # HTTP: 3000 -> 80
     ports:
       - 3000:80
-      - 3443:443
     environment:
-      - APP_HOST=ng-doc-pro
-      - APP_PORT=80
-      - PROXY_AUTH_ADD=false
       - TZ=UTC
-    # Volume for Caddy SSL certificates persistence
-    volumes:
-      - caddy_data:/data/caddy
-      - caddy_config:/config/caddy
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost"]
       interval: 30s
