@@ -1,6 +1,5 @@
 
 import { Injectable } from '@angular/core';
-import { WidgetInstance } from '../models/widget-instance.model';
 import { Page } from '../models/page.model';
 
 const STORAGE_KEY = 'dynamicDashboardState_pages';
