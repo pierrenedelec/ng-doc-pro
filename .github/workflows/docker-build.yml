@@ -30,11 +30,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: linux/amd64,linux/arm64
-      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
@@ -54,11 +49,11 @@ jobs:
             type=raw,value=latest
             type=sha,prefix={{branch}}-
       
-      - name: Build and push Docker image
+      - name: Build and push Docker image (x86_64/amd64 only)
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -72,14 +67,17 @@ jobs:
           sleep 5
           DIGEST=$(docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | grep "Digest:" | head -1 | awk '{print $2}')
           echo "digest=${DIGEST}" >> $GITHUB_OUTPUT
-          echo "### ✅ Multi-arch image built successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "### ✅ Docker image built successfully!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Digest:** \`${DIGEST}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Platforms:** linux/amd64, linux/arm64" >> $GITHUB_STEP_SUMMARY
+          echo "**Platform:** linux/amd64 (x86_64)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Update your docker-compose.yml with:**" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`yaml" >> $GITHUB_STEP_SUMMARY
           echo "image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest@${DIGEST}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ This image is built for x86_64 (amd64) architecture only." >> $GITHUB_STEP_SUMMARY
+          echo "This is compatible with most servers and your Umbrel x86_64." >> $GITHUB_STEP_SUMMARY
 
